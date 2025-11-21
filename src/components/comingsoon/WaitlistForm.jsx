@@ -48,20 +48,27 @@ export default function WaitlistForm({ translations }) {
         throw insertError;
       }
 
-      // Call Edge Function to send email notifications
-      const { error: emailError } = await supabase.functions.invoke('send-waitlist-notifications', {
-        body: {
-          name: formData.name,
-          email: formData.email,
-          relationship_status: formData.relationship_status,
-        },
-      });
+      // Call Edge Function to send email notifications (optional - don't block success)
+      try {
+        const { error: emailError } = await supabase.functions.invoke('send-waitlist-notifications', {
+          body: {
+            name: formData.name,
+            email: formData.email,
+            relationship_status: formData.relationship_status,
+          },
+        });
 
-      // Don't fail the form submission if email fails - user is still signed up
-      if (emailError) {
-        console.warn('Email notification failed:', emailError);
+        // Don't fail the form submission if email fails - user is still signed up
+        if (emailError) {
+          console.warn('Email notification failed (data was still saved):', emailError);
+          // Email failure doesn't prevent success - data is already saved
+        }
+      } catch (emailErr) {
+        // Edge function might not be deployed yet - that's okay, data is saved
+        console.warn('Email function error (data was still saved):', emailErr);
       }
       
+      // Success! Data is saved to database
       setIsSuccess(true);
       setFormData({ email: '', name: '', relationship_status: '' });
     } catch (error) {

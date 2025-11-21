@@ -49,7 +49,7 @@ export const translations = {
         dating: "Dating",
         engaged: "Engaged",
         married: "Married",
-        other: "Other"
+        other: "Others"
       },
       submitButton: "Join the Waitlist",
       submitting: "Joining...",

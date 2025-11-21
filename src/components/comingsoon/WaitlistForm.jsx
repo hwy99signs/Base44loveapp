@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { base44 } from '@/api/base44Client';
+import { supabase } from '@/api/supabaseClient';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -22,48 +22,45 @@ export default function WaitlistForm({ translations }) {
     setError(null);
 
     try {
-      await base44.entities.WaitlistSignup.create(formData);
-      
-      // Personalized email content based on relationship status
-      const personalizedContent = {
-        single: {
-          subject: 'Your Journey to Love Starts Here 💫',
-          body: `Hi ${formData.name || 'there'}!\n\nThank you for joining the One 2 One Love waitlist!\n\nAs someone who's single, you're in the perfect position to prepare for a meaningful relationship. Our platform will help you:\n\n✨ Build self-awareness and emotional intelligence\n💪 Develop healthy relationship habits before you meet someone\n💝 Understand your love language and communication style\n🎯 Set clear relationship goals and values\n\nWhen we launch, you'll have access to tools and resources that help you become the best partner you can be - even before you find "the one."\n\nGet ready to invest in yourself and your future relationship!\n\nWith love,\nThe One 2 One Love Team\n\n---\nLove. Grow. Evolve. Together.`
-        },
-        dating: {
-          subject: 'Strengthen Your Dating Journey 💕',
-          body: `Hi ${formData.name || 'there'}!\n\nThank you for joining the One 2 One Love waitlist!\n\nNavigating the dating phase can be exciting and challenging. Our platform will help you:\n\n💬 Improve communication with your partner\n🎯 Set healthy boundaries and relationship expectations\n💝 Understand each other's love languages\n🌟 Create meaningful experiences together\n📈 Track your relationship growth and milestones\n\nWhen we launch, you'll get access to expert guidance, fun date ideas, and tools to help your relationship flourish during this important stage.\n\nWe're excited to support your journey together!\n\nWith love,\nThe One 2 One Love Team\n\n---\nLove. Grow. Evolve. Together.`
-        },
-        engaged: {
-          subject: 'Prepare for Your Forever Together 💍',
-          body: `Hi ${formData.name || 'there'}!\n\nThank you for joining the One 2 One Love waitlist! Congratulations on your engagement!\n\nThis exciting time is perfect for strengthening your foundation. Our platform will help you:\n\n💑 Build strong communication patterns before marriage\n🏡 Align on important life goals and values\n💰 Navigate important discussions (finances, family, future)\n💝 Keep romance alive during wedding planning stress\n🎉 Create rituals and traditions for your marriage\n\nWhen we launch, you'll have access to tools specifically designed to help engaged couples transition smoothly into married life.\n\nHere's to your beautiful journey ahead!\n\nWith love,\nThe One 2 One Love Team\n\n---\nLove. Grow. Evolve. Together.`
-        },
-        married: {
-          subject: 'Deepen Your Marriage Connection ❤️',
-          body: `Hi ${formData.name || 'there'}!\n\nThank you for joining the One 2 One Love waitlist!\n\nMarriage is a beautiful journey that requires continuous nurturing. Our platform will help you:\n\n💑 Strengthen your emotional and physical intimacy\n🔥 Reignite the spark and romance\n💬 Master conflict resolution and communication\n📅 Never miss important dates and anniversaries\n🎯 Set and achieve relationship goals together\n🌟 Create new memories and break routine patterns\n\nWhen we launch, you'll have access to expert advice, creative date ideas, and tools to help your marriage thrive for years to come.\n\nHere's to growing deeper in love!\n\nWith love,\nThe One 2 One Love Team\n\n---\nLove. Grow. Evolve. Together.`
-        },
-        other: {
-          subject: 'Your Unique Love Journey Matters 🌈',
-          body: `Hi ${formData.name || 'there'}!\n\nThank you for joining the One 2 One Love waitlist!\n\nEvery love story is unique, and we're here to support yours. Our platform will help you:\n\n💝 Build deeper connections in your relationship\n💬 Improve communication and understanding\n🌟 Create meaningful experiences together\n🎯 Set and achieve relationship goals\n🤝 Access inclusive, supportive resources\n\nWhen we launch, you'll have access to tools and guidance designed to support all types of relationships and love journeys.\n\nWe're honored to be part of your story!\n\nWith love,\nThe One 2 One Love Team\n\n---\nLove. Grow. Evolve. Together.`
+      // Validate email
+      if (!formData.email) {
+        throw new Error('Email is required');
+      }
+
+      // Insert into Supabase database
+      const { data, error: insertError } = await supabase
+        .from('waitlist_signups')
+        .insert([
+          {
+            name: formData.name || null,
+            email: formData.email,
+            relationship_status: formData.relationship_status || null,
+          },
+        ])
+        .select()
+        .single();
+
+      if (insertError) {
+        // Handle duplicate email error gracefully
+        if (insertError.code === '23505') {
+          throw new Error('This email is already on the waitlist!');
         }
-      };
-      
-      const emailContent = personalizedContent[formData.relationship_status] || personalizedContent.other;
-      
-      // Send personalized confirmation email to subscriber
-      await base44.integrations.Core.SendEmail({
-        from_name: 'One 2 One Love',
-        to: formData.email,
-        subject: emailContent.subject,
-        body: emailContent.body
+        throw insertError;
+      }
+
+      // Call Edge Function to send email notifications
+      const { error: emailError } = await supabase.functions.invoke('send-waitlist-notifications', {
+        body: {
+          name: formData.name,
+          email: formData.email,
+          relationship_status: formData.relationship_status,
+        },
       });
-      
-      // Send notification email to admin
-      await base44.integrations.Core.SendEmail({
-        to: 'subscriptions@one2onelove.com',
-        subject: '💕 [ONE2ONE WAITLIST] New Signup - One 2 One Love',
-        body: `🌟 NEW WAITLIST SUBSCRIBER 🌟\n━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n✨ Another couple is joining the One 2 One Love journey!\n\nName: ${formData.name || 'Not provided'}\nEmail: ${formData.email}\nRelationship Status: ${formData.relationship_status || 'Not provided'}\n\n━━━━━━━━━━━━━━━━━━━━━━━━━━\nLove. Grow. Evolve. Together. 💜`
-      });
+
+      // Don't fail the form submission if email fails - user is still signed up
+      if (emailError) {
+        console.warn('Email notification failed:', emailError);
+      }
       
       setIsSuccess(true);
       setFormData({ email: '', name: '', relationship_status: '' });
@@ -119,11 +116,11 @@ export default function WaitlistForm({ translations }) {
                   <SelectValue placeholder={translations.statusPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="single">{translations.statusOptions.single}</SelectItem>
-                  <SelectItem value="dating">{translations.statusOptions.dating}</SelectItem>
-                  <SelectItem value="engaged">{translations.statusOptions.engaged}</SelectItem>
-                  <SelectItem value="married">{translations.statusOptions.married}</SelectItem>
-                  <SelectItem value="other">{translations.statusOptions.other}</SelectItem>
+                  <SelectItem value="Single">{translations.statusOptions.single}</SelectItem>
+                  <SelectItem value="Dating">{translations.statusOptions.dating}</SelectItem>
+                  <SelectItem value="Engaged">{translations.statusOptions.engaged}</SelectItem>
+                  <SelectItem value="Married">{translations.statusOptions.married}</SelectItem>
+                  <SelectItem value="Others">{translations.statusOptions.other}</SelectItem>
                 </SelectContent>
               </Select>
             </div>

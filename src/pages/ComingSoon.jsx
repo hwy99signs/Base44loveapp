@@ -4,6 +4,7 @@ import { Heart, Sparkles, Globe } from 'lucide-react';
 import FeatureTabs from '../components/comingsoon/FeatureTabs';
 import LanguageSelector from '../components/comingsoon/LanguageSelector';
 import WaitlistForm from '../components/comingsoon/WaitlistForm';
+import NewYearBanner from '../components/comingsoon/NewYearBanner';
 
 import { translations } from '../components/translations';
 
@@ -85,6 +86,11 @@ export default function ComingSoon() {
           </div>
         </div>
 
+        {/* New Year Banner Section - Moved Up */}
+        <div className="relative py-2 px-6 -mt-16">
+          <NewYearBanner />
+        </div>
+
         {/* Features Section */}
         <div className="relative py-24 px-6">
           <div className="container mx-auto max-w-7xl">
@@ -119,7 +125,7 @@ export default function ComingSoon() {
         </div>
 
         {/* Waitlist Section */}
-        <div className="relative py-12 px-6">
+        <div className="relative py-12 px-6" data-waitlist-section>
           <div className="container mx-auto max-w-2xl">
             <motion.div
               initial={{ opacity: 0, y: 30 }}

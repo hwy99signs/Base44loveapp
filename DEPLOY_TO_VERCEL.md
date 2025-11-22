@@ -8,7 +8,7 @@ Vercel is the easiest way to deploy your Vite + React app. It's free and takes 2
 2. **Sign up/Login** with your GitHub account
 3. **Click "Add New Project"**
 4. **Import your repository**: 
-   - Select `hwy99signs/Base44loveapp`
+   - Select `hwy99signs/Base44loveapp` (your GitHub repository)
    - Choose the `backend` branch (or `master`)
 5. **Configure Project**:
    - **Framework Preset**: Vite

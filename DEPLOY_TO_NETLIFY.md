@@ -7,7 +7,7 @@ Netlify is another great option for deploying React/Vite apps.
 1. **Go to Netlify**: https://netlify.com
 2. **Sign up/Login** with your GitHub account
 3. **Click "Add new site" → "Import an existing project"**
-4. **Choose GitHub** and select `hwy99signs/Base44loveapp`
+4. **Choose GitHub** and select `hwy99signs/Base44loveapp` (your GitHub repository)
 5. **Configure Build Settings**:
    - **Branch to deploy**: `backend` (or `master`)
    - **Build command**: `npm run build`

@@ -1,3 +1,6 @@
+// DEPRECATED: This file is no longer used. The app now uses Supabase directly.
+// Kept for reference only.
+
 import { base44 } from './base44Client';
 
 

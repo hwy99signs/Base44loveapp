@@ -1,3 +1,6 @@
+// DEPRECATED: This file is no longer used. The app now uses Supabase directly.
+// Kept for reference only.
+
 import { createClient } from '@base44/sdk';
 // import { getAccessToken } from '@base44/sdk/utils/auth-utils';
 

@@ -65,4 +65,4 @@ When users sign up for the waitlist:
 When you're ready to launch:
 - Use the `send-invites` Edge Function to send launch invitations to all waitlist subscribers
 
-For more information and support, please contact Base44 support at app@base44.com.
+For more information and support, please contact One2onelove at subscriptions@one2onelove.com.

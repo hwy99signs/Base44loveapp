@@ -5,6 +5,8 @@ import path from 'path'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  // Use relative base path so assets load from same origin (fixes CORS issues with www/non-www)
+  base: './',
   server: {
     allowedHosts: true
   },

@@ -91,35 +91,35 @@ export default function WaitlistForm({ translations }) {
             className="space-y-5"
           >
             <div className="relative">
-              <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <User className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
               <Input
                 type="text"
                 placeholder={translations.namePlaceholder}
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="pl-12 h-14 rounded-2xl border-2 border-gray-200 focus:border-purple-400 transition-colors text-base"
+                className="pl-10 sm:pl-12 h-12 sm:h-14 rounded-xl sm:rounded-2xl border-2 border-gray-200 focus:border-purple-400 transition-colors text-sm sm:text-base"
               />
             </div>
 
             <div className="relative">
-              <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Mail className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
               <Input
                 type="email"
                 placeholder={translations.emailPlaceholder}
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                 required
-                className="pl-12 h-14 rounded-2xl border-2 border-gray-200 focus:border-purple-400 transition-colors text-base"
+                className="pl-10 sm:pl-12 h-12 sm:h-14 rounded-xl sm:rounded-2xl border-2 border-gray-200 focus:border-purple-400 transition-colors text-sm sm:text-base"
               />
             </div>
 
             <div className="relative">
-              <Heart className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 z-10" />
+              <Heart className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 z-10" />
               <Select
                 value={formData.relationship_status}
                 onValueChange={(value) => setFormData({ ...formData, relationship_status: value })}
               >
-                <SelectTrigger className="pl-12 h-14 rounded-2xl border-2 border-gray-200 focus:border-purple-400 transition-colors text-base">
+                <SelectTrigger className="pl-10 sm:pl-12 h-12 sm:h-14 rounded-xl sm:rounded-2xl border-2 border-gray-200 focus:border-purple-400 transition-colors text-sm sm:text-base">
                   <SelectValue placeholder={translations.statusPlaceholder} />
                 </SelectTrigger>
                 <SelectContent>
@@ -135,7 +135,7 @@ export default function WaitlistForm({ translations }) {
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="w-full h-14 rounded-2xl bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold text-base shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full h-12 sm:h-14 rounded-xl sm:rounded-2xl bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white font-semibold text-sm sm:text-base shadow-lg hover:shadow-xl transition-all duration-300"
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-2">
@@ -172,23 +172,23 @@ export default function WaitlistForm({ translations }) {
               initial={{ scale: 0 }}
               animate={{ scale: 1 }}
               transition={{ type: 'spring', duration: 0.6 }}
-              className="w-20 h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center mx-auto mb-6"
+              className="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-green-400 to-green-500 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6"
             >
-              <CheckCircle2 className="w-10 h-10 text-white" />
+              <CheckCircle2 className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
             </motion.div>
             
-            <h3 className="text-2xl font-bold text-gray-900 mb-3">
+            <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
               {translations.successTitle}
             </h3>
             
-            <p className="text-gray-600 leading-relaxed max-w-sm mx-auto">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed max-w-sm mx-auto">
               {translations.successMessage}
             </p>
 
             <Button
               onClick={() => setIsSuccess(false)}
               variant="outline"
-              className="mt-6 rounded-full px-8"
+              className="mt-4 sm:mt-6 rounded-full px-6 sm:px-8 text-sm sm:text-base"
             >
               {translations.addAnother}
             </Button>

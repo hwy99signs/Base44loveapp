@@ -16,32 +16,32 @@ export default function LanguageSelector({ heading, currentLanguage, onLanguageC
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="bg-white/95 backdrop-blur-md rounded-3xl shadow-2xl p-6 md:p-8 border border-purple-200 flex flex-col justify-center min-h-[192px] md:min-h-[176px]"
+      className="bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-2xl p-4 sm:p-6 md:p-8 border border-purple-200 flex flex-col justify-center min-h-[180px] sm:min-h-[192px] md:min-h-[176px]"
     >
-      <h3 className="text-2xl font-bold text-purple-700 text-center mb-6">
+      <h3 className="text-xl sm:text-2xl font-bold text-purple-700 text-center mb-4 sm:mb-6">
         {heading}
       </h3>
       
-      <div className="flex gap-3 justify-center flex-wrap">
+      <div className="flex gap-2 sm:gap-3 justify-center flex-wrap">
         {languages.map((lang) => (
           <motion.button
             key={lang.code}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => onLanguageChange(lang.code)}
-            className={`px-6 py-3 rounded-full font-semibold text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-2 whitespace-nowrap ${
+            className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold text-xs sm:text-sm shadow-lg hover:shadow-xl transition-all duration-300 flex items-center gap-1.5 sm:gap-2 whitespace-nowrap ${
               currentLanguage === lang.code
                 ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
                 : 'bg-white text-gray-700 border-2 border-purple-200 hover:border-purple-400'
             }`}
           >
-            <img src={lang.flag} alt={translations.languageNames[lang.code]} className="w-5 h-5 object-cover rounded-sm" />
+            <img src={lang.flag} alt={translations.languageNames[lang.code]} className="w-4 h-4 sm:w-5 sm:h-5 object-cover rounded-sm" />
             <span>{translations.languageNames[lang.code]}</span>
           </motion.button>
         ))}
       </div>
 
-      <p className="text-center text-xs text-gray-500 mt-8 font-bold">
+      <p className="text-center text-xs text-gray-500 mt-6 sm:mt-8 font-bold">
         {translations.clickToTry}
       </p>
     </motion.div>

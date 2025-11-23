@@ -156,12 +156,12 @@ export default function ComingSoon() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              className="text-center mb-16"
+              className="text-center mb-8 md:mb-16"
             >
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
+              <h2 className="hidden md:block text-4xl md:text-5xl font-bold text-white mb-4 drop-shadow-lg">
                 {t.features.heading}
               </h2>
-              <p className="text-xl text-white/90 max-w-3xl mx-auto drop-shadow-md">
+              <p className="hidden md:block text-xl text-white/90 max-w-3xl mx-auto drop-shadow-md">
                 {t.features.subheading}
               </p>
             </motion.div>
